@@ -1,33 +1,32 @@
-datasource db {
-  provider = "postgresql"
-}
-
 generator client {
   provider = "prisma-client"
   output   = "./generated/prisma"
 }
 
+datasource db {
+  provider = "postgresql"
+}
+
 model User {
-  id  String  @id @default(uuid())
-  name  String
-  email String @unique
-  passwordHash  String  @map("password_hash")
-  createdAt DateTime @default(now()) @map("created_at")
-  file File[]
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  createdAt    DateTime @default(now()) @map("created_at")
+  file         File[]
 
   @@map("users")
 }
 
 model File {
-  id  String  @id @default(uuid())
-  ownerId String  @map("owner_id")
-  originalName String @map("original_name")
-  storageKey  String  @map("storage_key")
-  mimeType  String @map("mime_type")
-  size  Int
-  createdAt DateTime @default(now()) @map("created_at")
-  
-  owner User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  
+  id           String   @id @default(uuid())
+  ownerId      String   @map("owner_id")
+  originalName String   @map("original_name")
+  storageKey   String   @map("storage_key")
+  mimeType     String   @map("mime_type")
+  size         Int
+  createdAt    DateTime @default(now()) @map("created_at")
+  owner        User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
   @@map("files")
 }
