@@ -13,9 +13,9 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/dashboard", req.url));
   }
 
-  // 3. If the user is NOT logged in, block them from visiting /dashboard or /api/files
+  // 3. If the user is NOT logged in, block them from visiting /dashboard, /upload or /api/files
   // and redirect them to /login instead.
-  if (!token && (pathname.startsWith("/dashboard") || pathname.startsWith("/api/files"))) {
+  if (!token && (pathname.startsWith("/dashboard") || pathname.startsWith("/api/files") || pathname.startsWith("/upload"))) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
@@ -28,6 +28,7 @@ export const config = {
   matcher: [
     "/dashboard/:path*",
     "/api/files/:path*",
+    "/upload/:path*",
     "/login",
     "/register"
   ],
