@@ -1,5 +1,9 @@
-import "dotenv/config";
+import dotenv from "dotenv";
 import { defineConfig, env } from "@prisma/config";
+
+// Load environment variables from .env.local first, then fall back to .env
+dotenv.config({ path: ".env.local" });
+dotenv.config();
 
 export default defineConfig({
   schema: "prisma/schema.prisma",
@@ -7,3 +11,4 @@ export default defineConfig({
     url: env("DATABASE_URL"),
   },
 });
+
