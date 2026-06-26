@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { signOut, useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function UploadPage() {
   const { data: session, status } = useSession();
@@ -33,12 +34,12 @@ export default function UploadPage() {
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setFileEnter(false);
-    
+
     if (e.dataTransfer.files) {
       addFilesToList(Array.from(e.dataTransfer.files));
     }
   };
-  
+
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       addFilesToList(Array.from(e.target.files));
@@ -94,7 +95,7 @@ export default function UploadPage() {
     setSelectedFiles((prev) => prev.filter((_, idx) => idx !== index));
   };
 
-    return (
+  return (
     <div className="p-6 min-h-screen bg-white text-black">
       {/* Header bar */}
       <div className="flex justify-between items-center max-w-5xl mx-auto mb-8 border-b border-gray-200 pb-4">
@@ -102,18 +103,25 @@ export default function UploadPage() {
           <h1 className="text-xl font-bold tracking-wider">DMS Upload Page</h1>
           <p className="text-gray-500 text-xs">Logged in: {session?.user?.email}</p>
         </div>
-        <Button 
-          onClick={() => signOut({ callbackUrl: "/login"})} 
-          // variant="destructive"
-          className="uppercase tracking-widest text-xs"
-        >
-          Log Out
-        </Button>
+        <div className="flex items-center gap-3">
+          <Link href="/dashboard">
+            <Button variant="outline" className="uppercase tracking-widest text-xs">
+              Dashboard
+            </Button>
+          </Link>
+          <Button
+            onClick={() => signOut({ callbackUrl: "/login" })}
+            // variant="destructive"
+            className="uppercase tracking-widest text-xs"
+          >
+            Log Out
+          </Button>
+        </div>
       </div>
 
       {/* Main Grid Area */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-        
+
         {/* Left Side: Drag and Drop Upload Zone */}
         <div>
           <div
@@ -121,9 +129,8 @@ export default function UploadPage() {
             onDragLeave={handleDragLeave}
             onDragEnd={handleDragEnd}
             onDrop={handleDrop}
-            className={`mx-auto flex flex-col w-full h-72 border-solid items-center justify-center transition-colors cursor-pointer border-gray-300 ${
-              fileEnter ? "border-4 bg-gray-100" : "border-2 bg-white hover:bg-gray-100"
-            }`}
+            className={`mx-auto flex flex-col w-full h-72 border-solid items-center justify-center transition-colors cursor-pointer border-gray-300 ${fileEnter ? "border-4 bg-gray-100" : "border-2 bg-white hover:bg-gray-100"
+              }`}
           >
             <label
               htmlFor="file"
@@ -145,7 +152,7 @@ export default function UploadPage() {
         <div className="flex flex-col justify-between h-72">
           {selectedFiles.length > 0 ? (
             <div className="w-full flex-1 flex flex-col overflow-hidden">
-                            {/* Header and Action buttons side-by-side */}
+              {/* Header and Action buttons side-by-side */}
               <div className="flex justify-between items-center mb-3">
                 <h3 className="text-xs uppercase tracking-wider font-semibold text-gray-500">
                   Files Selected ({selectedFiles.length})
@@ -206,17 +213,16 @@ export default function UploadPage() {
           {/* Upload Status message */}
           {uploadStatus && (
             <div
-              className={`mt-3 p-2 text-center text-xs border rounded ${
-                uploadStatus.startsWith("Success")
+              className={`mt-3 p-2 text-center text-xs border rounded ${uploadStatus.startsWith("Success")
                   ? "bg-green-50 border-green-200 text-green-700"
                   : "bg-red-50 border-red-200 text-red-700"
-              }`}
+                }`}
             >
               {uploadStatus}
             </div>
           )}
         </div>
-        
+
       </div>
     </div>
   )
