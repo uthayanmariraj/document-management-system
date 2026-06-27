@@ -38,6 +38,31 @@ export default function Dashboard(){
     }
   }
 
+  const handleDelete = async(fileId: string) => {
+    if (!confirm("Are you sure you want to delete this file?")) return;
+    
+    setError("")
+    setLoading(true)
+
+    try{
+      const response = await fetch(`/api/files/delete?id=${fileId}`, {
+        method: "DELETE",
+      })
+
+      const data = await response.json()
+      if(response.ok){
+        await showFiles()
+      }
+      else{
+        setError(data.message || "Failed to delete file.")
+      }
+    } catch(err){
+      setError("Failed to delete file. Please try again")
+    } finally{
+      setLoading(false)
+    }
+  }
+
   useEffect(() => {
     showFiles()
   }, [])
@@ -117,6 +142,9 @@ export default function Dashboard(){
                     >
                       Download
                     </a>
+                    <Button variant = "destructive" onClick = {() => {handleDelete(file.id)}}>
+                      Delete
+                    </Button>
                   </div>
                 </div>
               ))}
