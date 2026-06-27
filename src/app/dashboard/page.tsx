@@ -38,6 +38,23 @@ export default function Dashboard(){
     }
   }
 
+  const handleDownload = async(fileId: string) => {
+    setError("")
+    try {
+      const response = await fetch(`/api/files/download?id=${fileId}`)
+      const data = await response.json()
+      if (response.ok) {
+        window.open(data.downloadUrl, "_blank")
+      } else {
+        setError(data.message || "Failed to downlaod files.");
+      }
+    } catch(err) {
+       setError("Couldnt fetch download link");
+    } finally {
+      setLoading(false)
+    }
+  }
+  
   const handleDelete = async(fileId: string) => {
     if (!confirm("Are you sure you want to delete this file?")) return;
     
@@ -133,15 +150,10 @@ export default function Dashboard(){
                     <span className="text-gray-400">
                       {(file.size / (1024 * 1024)).toFixed(2)} MB
                     </span>
-                    <a 
-                      href={file.downloadUrl}
-                      download={file.originalName}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-4 py-1.5 uppercase tracking-widest bg-teal-600 hover:bg-teal-700 text-white rounded text-[10px] font-bold transition-all text-center"
-                    >
+                    <Button onClick = {() => {handleDownload(file.id)}}
+                      className="px-4 py-1.5 uppercase tracking-widest bg-teal-600 hover:bg-teal-700 text-white rounded text-[10px] font-bold transition-all text-center">
                       Download
-                    </a>
+                    </Button>
                     <Button variant = "destructive" onClick = {() => {handleDelete(file.id)}}>
                       Delete
                     </Button>

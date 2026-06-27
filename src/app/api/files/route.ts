@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { getS3SignedUrl } from "@/lib/s3";
 
 export async function GET(req: Request) {
     try{
@@ -17,10 +16,8 @@ export async function GET(req: Request) {
 
         const links = await Promise.all(
             files.map(async (file) => {
-                const url = await getS3SignedUrl(file.storageKey, file.originalName)
                 return {
                     ...file,
-                    downloadUrl: url,
                 }
             })
         )
