@@ -26,11 +26,13 @@ export async function uploadToS3(fileBuffer: Buffer, filename: string, mimeType:
 }
 
 //helper to download with same name
-export async function getS3SignedUrl(storageKey: string, originalFilename: string): Promise<string> {
+export async function getS3SignedUrl(storageKey: string, originalFilename: string, inline = false): Promise<string> {
     const command = new GetObjectCommand({
         Bucket: bucketName,
         Key: storageKey,
-        ResponseContentDisposition: `attachment; filename="${encodeURIComponent(originalFilename)}"`,
+        ResponseContentDisposition: inline 
+          ? `inline; filename="${encodeURIComponent(originalFilename)}"`
+          : `attachment; filename="${encodeURIComponent(originalFilename)}"`,
     })
 
     return await getSignedUrl(s3Client, command, { expiresIn: 900 });

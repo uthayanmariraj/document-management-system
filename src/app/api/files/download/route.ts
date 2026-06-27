@@ -7,6 +7,7 @@ import { getS3SignedUrl } from "@/lib/s3";
 export async function GET(req: Request) {
     const { searchParams } = new URL(req.url)
         const fileId = searchParams.get("id")
+        const preview = searchParams.get("preview") === "true";
         const session = await getServerSession(authOptions)
     
         if(!fileId) return NextResponse.json({ message: "File Id required" }, { status: 400 },)
@@ -18,6 +19,7 @@ export async function GET(req: Request) {
         if(!file) return NextResponse.json({ message: "File not Found"}, { status: 404})
         if(file.ownerId !== userId) return NextResponse.json({ message: "Unauthorized"}, { status: 403})
 
-    const downloadUrl = await getS3SignedUrl(file.storageKey, file.originalName);
-    return NextResponse.json({ downloadUrl });
+    const downloadUrl = await getS3SignedUrl(file.storageKey, file.originalName, preview);
+    return NextResponse.json({ downloadUrl, mimeType: file.mimeType, 
+        originalName: file.originalName });
 }
