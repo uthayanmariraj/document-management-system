@@ -1,3 +1,4 @@
+/* eslint-disable */
 const { S3Client, ListBucketsCommand, PutObjectCommand } = require("@aws-sdk/client-s3");
 require("dotenv").config({ path: ".env.local" });
 

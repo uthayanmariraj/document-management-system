@@ -1,10 +1,5 @@
 "use client";
 
-interface LoginResponse {
-  message: string;
-  userId?: string;
-}
-
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
@@ -18,7 +13,6 @@ export default function Login() {
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
-  const [loggedIn, setLoggedIn] = useState(false)
   const router = useRouter()
 
   const handleSubmit = async(e: React.SubmitEvent) => {
@@ -43,13 +37,12 @@ export default function Login() {
       }
 
     } catch(err) {
-      setError("An unexpected error occurred.");
+      setError("An unexpected error occurred. error: "+err);
       setLoading(false);
     }
   }
 
   return (
-    <div>{loggedIn ? (<p>huhsiudh</p>) : (
     <div>
       {error && <p>{error}</p>}
       <p>Dont have an account? <Link href = "/register" className = "under line text-blue-600 hover:text-blue-800"> Sign up</Link> </p>
@@ -58,9 +51,8 @@ export default function Login() {
         <Input type="text" value = {email} onChange = {(e) => {setEmail(e.target.value)}}/>
         <p>Password:</p>
         <Input type="password" value = {password} onChange = {(e) => {setPassword(e.target.value)}}/>
-        <Button>SUBMIT</Button>
+        <Button disabled={loading}>{loading ? "SUBMITTING..." : "SUBMIT"}</Button>
       </form>
     </div>
-    )}</div>
   )
 }

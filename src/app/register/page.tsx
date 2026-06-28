@@ -4,7 +4,6 @@ import { useState } from "react"
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { styleText } from "util";
 
 interface RegisterResponse{
     message: string;
@@ -50,7 +49,7 @@ export default function Register(){
                 setPassword("");
                 setConfirmpw("");
             }
-        } catch (err){
+        } catch {
             setError("Failed to connect to server")
         }
 

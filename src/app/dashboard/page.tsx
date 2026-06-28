@@ -45,7 +45,7 @@ export default function Dashboard(){
         setError(data.message || "Failed to load files.");
       }
     } catch(err) {
-       setError("Failed to load files. Please try again.");
+       setError("Failed to load files.Error:"+err);
     } finally {
       setLoading(false)
     }
@@ -68,7 +68,7 @@ export default function Dashboard(){
         setError(data.message || "Failed to load preview.");
       }
     } catch (err) {
-      setError("An error occurred trying to load the preview.");
+      setError("An error occurred trying to load the preview. error: "+err);
     } finally {
       setLoading(false);
     }
@@ -85,7 +85,7 @@ export default function Dashboard(){
         setError(data.message || "Failed to downlaod files.");
       }
     } catch(err) {
-       setError("Couldnt fetch download link");
+       setError("Couldnt fetch download link.error: "+err);
     } finally {
       setLoading(false)
     }
@@ -110,13 +110,14 @@ export default function Dashboard(){
         setError(data.message || "Failed to delete file.")
       }
     } catch(err){
-      setError("Failed to delete file. Please try again")
+      setError("Failed to delete file. Please try again. error: "+err)
     } finally{
       setLoading(false)
     }
   }
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     showFiles()
   }, [])
 

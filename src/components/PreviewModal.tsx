@@ -52,6 +52,7 @@ export function PreviewModal({ isOpen, onClose, file }: PreviewModalProps) {
             <div className="flex-1 overflow-hidden p-6 flex justify-center items-center bg-gray-100/50">
             
             {file.mimeType.startsWith("image/") && (
+                /* eslint-disable-next-line @next/next/no-img-element */
                 <img 
                 src={file.url} 
                 alt={file.originalName} 
